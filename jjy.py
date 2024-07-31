@@ -12,13 +12,16 @@ handler = logging.StreamHandler()
 handler.setLevel(logging.INFO)
 logger.addHandler(handler)
 
-
 OP_FREQ = 40000 / 3  # emitted frequency, Hz
 
 
+def get_local_timezone_offset():
+    offset_sec = time.altzone if time.localtime().tm_isdst else time.timezone
+    offset_hours = offset_sec / -3600
+    return int(offset_hours)
+
+
 # BCD and parity calculation helpers
-
-
 def to_bcd(val: int):
     return (val % 10) + ((val // 10 % 10) << 4) + (val // 100 << 8)
 
@@ -43,7 +46,7 @@ def unix_time_to_dict(unix_time):
         "minute": to_bcd(time_in_utc.tm_min),
         "second": time_in_utc.tm_sec,
         "wday": (time_in_utc.tm_wday + 1)
-        % 7,  # In Python, Monday is 0; in JJY, Sunday is 0
+                % 7,  # In Python, Monday is 0; in JJY, Sunday is 0
         "unix": int(unix_time),  # save the unix time representation
     }
 
@@ -107,7 +110,7 @@ stream_pos = 0
 def bitcode_transmit(in_data, frame_count, time_info, status):
     global current_stream, stream_pos
     frame_len = frame_count << 1  # 2 bytes per frame as we're using int16
-    frame_data = current_stream[stream_pos : stream_pos + frame_len]
+    frame_data = current_stream[stream_pos: stream_pos + frame_len]
     stream_pos += frame_len
     return frame_data, pyaudio.paContinue
 
@@ -127,8 +130,8 @@ def start_transmission(time_params):
     logger.info("Time fetched:", ts)
     logger.info(f"Timezone: {int(time_params['offset'] / 3600)}")
     bitcode = generate_timecode(ts)[
-        ts["second"] + 1 :
-    ]  # slice the rest of current minute
+              ts["second"] + 1:
+              ]  # slice the rest of current minute
     next_min = ts["unix"] - ts["second"]  # rewind to start of the minute
     for _ in range(mins):  # generate bitcode for the next N minutes
         next_min += 60  # calc the next minute
@@ -186,8 +189,8 @@ if __name__ == "__main__":
         "-o",
         "--tz-offset",
         type=float,
-        default=7,
-        help="Timezone offset from UTC to transmit (in hours, default 7 - corresponds to BKK)",
+        default=get_local_timezone_offset(),
+        help="Timezone offset from UTC to transmit (in hours, default automatic based on local TZ)",
     )
     parser.add_argument(
         "-r",
