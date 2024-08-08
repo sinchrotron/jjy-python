@@ -196,4 +196,5 @@ if __name__ == '__main__':
         'delta': args.delta, 'offset': int(args.tz_offset * 3600),
         'sr': args.sample_rate, 'duration': args.duration
     }
-    start_transmission(params)
+    while True:
+        start_transmission(params)
