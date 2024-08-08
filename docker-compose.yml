@@ -2,5 +2,6 @@ services:
   jjy:
     build: .
     restart: always
-    volumes:
-        - /dev/snd:/dev/snd
+    devices:
+      - /dev/snd/
+

@@ -4,7 +4,12 @@
 # Depends on pyaudio and ntplib
 # Created by Luxferre in 2024, released into public domain
 
-import pyaudio, ntplib, math, array, time, datetime
+import array
+import datetime
+import math
+import ntplib
+import pyaudio
+import time
 
 OP_FREQ = 40000 / 1  # emitted frequency, Hz
 
@@ -181,7 +186,7 @@ if __name__ == '__main__':
     parser = ArgumentParser(
         description='JJY.py: an opensource longwave time synchronizer for JJY40-enabled watches and clocks',
         epilog='(c) Luxferre 2024 --- No rights reserved <https://unlicense.org>')
-    parser.add_argument('-t', '--duration', type=int, default=30, help='Transmission duration (in minutes, default 30)')
+    parser.add_argument('-t', '--duration', type=int, default=60*23, help='Transmission duration (in minutes, default 30)')
     parser.add_argument('-d', '--delta', type=int, default=0,
                         help='Manual delta correction (in ms, must be determined individually, 0 by default)')
     parser.add_argument('-o', '--tz-offset', type=float, default=7,
@@ -197,5 +202,5 @@ if __name__ == '__main__':
         'delta': args.delta, 'offset': int(args.tz_offset * 3600),
         'sr': args.sample_rate, 'duration': args.duration
     }
-    while True:
+    while 1:
         start_transmission(params)

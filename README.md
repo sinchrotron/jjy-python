@@ -1,5 +1,9 @@
 JJY.py: sync JJY40-enabled watches and clocks from Python 3
 -----------------------------------------------------------
+
+ apt update && apt -y install portaudio19-dev python3-pyaudio
+
+
 This is a Python port of the 7-year old "Project Fukushima" JJY40 emulator
 for syncing longwave-enabled watches and clocks that support this station.
 With the help of any sort of loop antenna (or even headphones or speakers), it
