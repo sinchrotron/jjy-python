@@ -245,5 +245,5 @@ if __name__ == "__main__":
         "sr": args.sample_rate,
         "duration": args.duration,
     }
-    while 1:
-        start_transmission(params)
+
+    start_transmission(params)
