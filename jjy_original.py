@@ -172,6 +172,7 @@ def start_transmission(timeparams):
     stream.close()
     p.terminate()
     print("Transmission ended")
+    return
 
 
 if __name__ == '__main__':
