@@ -1,7 +1,13 @@
 services:
   jjy:
-    build: .
-    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: root
+    privileged: true
     devices:
-      - /dev/snd/
-
+      - /dev/mem:/dev/mem
+    restart: always
+    volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    - "/etc/timezone:/etc/timezone:ro"
